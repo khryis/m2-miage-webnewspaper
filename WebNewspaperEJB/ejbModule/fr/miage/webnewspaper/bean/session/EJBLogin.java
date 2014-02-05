@@ -1,6 +1,9 @@
 package fr.miage.webnewspaper.bean.session;
 
 import javax.ejb.Stateful;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import fr.miage.webnewspaper.bean.entity.User;
 
@@ -11,17 +14,23 @@ import fr.miage.webnewspaper.bean.entity.User;
 public class EJBLogin implements EJBLoginRemote, EJBLoginLocal {
 
 	private User user;
-	private Boolean isLogged;
+	
+	@PersistenceContext (unitName = "WebNewspaperEJB") 
+	EntityManager em;
 
 	public EJBLogin() {
-		user = new User();
-		user.setEmail("test@test.fr");
-		user.setPassword("test");
+	}
+	
+	public User getUser(String email){
+		TypedQuery<User> query = em.createNamedQuery("User.findByEmail", User.class);
+		return query.getSingleResult();
 	}
 
 	@Override
 	public Boolean checkUser(String email, String password) {
-		if (user.getPassword().equals(password) && user.getEmail().equals(email)) {
+		User u = getUser(email);
+		if (u != null && u.getPassword().equals(password)) {
+			this.user = u;
 			return true;
 		} else {
 			return false;
@@ -30,7 +39,11 @@ public class EJBLogin implements EJBLoginRemote, EJBLoginLocal {
 
 	@Override
 	public Boolean isLogged() {
-		return isLogged;
+		if (user != null){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

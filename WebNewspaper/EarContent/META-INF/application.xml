@@ -11,9 +11,6 @@
     <java>WebNewspaperClient.jar</java>
   </module>
   <module>
-    <connector>WebNewspaperConnector.rar</connector>
-  </module>
-  <module>
     <ejb>WebNewspaperEJB.jar</ejb>
   </module>
 </application>

@@ -2,7 +2,25 @@ package fr.miage.webnewspaper.bean.entity;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="USER", schema="WebNewspaper")
+@NamedQueries({
+    @NamedQuery(name="User.findAll",
+                query="SELECT u.id, u.email FROM User u"),
+    @NamedQuery(name="User.findByEmail",
+                query="SELECT u FROM User u WHERE u.email = :email"),
+}) 
 public class User {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String firstName;
 	private String lastName;
