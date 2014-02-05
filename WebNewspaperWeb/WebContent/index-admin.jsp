@@ -4,8 +4,7 @@
 
 <%@ page import="java.util.Arrays"%>
 <%@ page import="javax.ejb.EJB"%>
-<%@ page import="fr.miage.webnewspaper.bean.session.EJBLoginRemote"%>
-<%@ page import="fr.miage.webnewspaper.bean.entity.User"%>
+<%@ page import="fr.miage.webnewspaper.bean.session.EJBLoginAdminRemote"%>
 <%@ page import="java.util.Properties"%>
 <%@ page import="javax.naming.InitialContext"%>
 <%@ page import="javax.naming.Context"%>
@@ -21,22 +20,22 @@
 <body>
 	<div class="container">
 		<%!@EJB
-			EJBLoginRemote ejbLogin;
+			EJBLoginAdminRemote ejbLoginAdmin;
 			String message = null;
 		%>
 		<%
 			try {
-				ejbLogin = (EJBLoginRemote) session.getAttribute("ejbLogin");
-				if(ejbLogin.isLogged()){
-					response.sendRedirect("accueil.jsp");
+				ejbLoginAdmin = (EJBLoginAdminRemote) session.getAttribute("ejbLoginAdmin");
+				if(ejbLoginAdmin.isLogged()){
+					response.sendRedirect("accueil-admin.jsp");
 				}else{
 					Properties props = new Properties();
 					props.setProperty("org.omg.CORBA.ORBInitialHost", "localhost");
 					props.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
 					Context context = new InitialContext(props);
 					if (context != null) {
-						ejbLogin = (EJBLoginRemote) context.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBLogin!fr.miage.webnewspaper.bean.session.EJBLoginRemote");
-						session.setAttribute("ejbLogin", ejbLogin);
+						ejbLoginAdmin = (EJBLoginAdminRemote) context.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBLoginAdmin!fr.miage.webnewspaper.bean.session.EJBLoginAdminRemote");
+						session.setAttribute("ejbLoginAdmin", ejbLoginAdmin);
 					}
 				}
 			} catch (Exception e) {
@@ -45,8 +44,8 @@
 		%>
 		<div>
 			<h1>Bienvenue</h1>
-			<a class="btn btn-default" href="create-account.jsp">Créer un compte</a>
-			<a class="btn btn-default" href="login.jsp">Me connecter</a>
+			<a class="btn btn-default" href="create-account-admin.jsp">Créer un compte administrateur</a>
+			<a class="btn btn-default" href="login-admin.jsp">Me connecter</a>
 			
 		</div>
 	</div>

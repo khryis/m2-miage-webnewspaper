@@ -2,6 +2,8 @@ package fr.miage.webnewspaper.bean.session;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -23,7 +25,13 @@ public class EJBLogin implements EJBLoginRemote, EJBLoginLocal {
 	
 	public User getUser(String email){
 		TypedQuery<User> query = em.createNamedQuery("User.findByEmail", User.class);
-		return query.getSingleResult();
+		query.setParameter("email", email);
+		try{
+			return query.getSingleResult();
+		}catch(NoResultException|NonUniqueResultException e){
+			return null;
+		}
+		
 	}
 
 	@Override
@@ -44,6 +52,11 @@ public class EJBLogin implements EJBLoginRemote, EJBLoginLocal {
 		}else{
 			return false;
 		}
+	}
+
+	@Override
+	public User getUser() {
+		return user;
 	}
 
 }

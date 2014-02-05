@@ -4,13 +4,21 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="WebNewspaperEJB"
 		transaction-type="JTA">
-		<jta-data-source>jdbc/WebNewspaper</jta-data-source>
+		<jta-data-source>jdbc/WebNewspaperEJB</jta-data-source>
 		<class>fr.miage.webnewspaper.bean.entity.User</class>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<class>fr.miage.webnewspaper.bean.entity.Administrator</class>
+		<class>fr.miage.webnewspaper.bean.entity.Article</class>
+		<class>fr.miage.webnewspaper.bean.entity.Comment</class>
+		<class>fr.miage.webnewspaper.bean.entity.Journalist</class>
+		<class>fr.miage.webnewspaper.bean.entity.Rate</class>
+		<class>fr.miage.webnewspaper.bean.entity.Reader</class>
+		<class>fr.miage.webnewspaper.bean.entity.Subscription</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
-			<!-- <property name="javax.persistence.target-server" value="SunAS9"/> -->
 			<property name="javax.persistence.target-database" value="MYSQL" />
 			<property name="javax.persistence.logging.level" value="FINEST" />
+<!-- 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/> -->
+			<property name="eclipselink.ddl-generation" value="create-tables"/>
 		</properties>
 	</persistence-unit>
 </persistence>

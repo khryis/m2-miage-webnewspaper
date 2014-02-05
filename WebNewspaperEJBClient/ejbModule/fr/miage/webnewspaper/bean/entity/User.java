@@ -1,33 +1,51 @@
 package fr.miage.webnewspaper.bean.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="USER", schema="WebNewspaper")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+        name = "DISCRIMINATOR",
+        discriminatorType = DiscriminatorType.STRING
+)
 @NamedQueries({
     @NamedQuery(name="User.findAll",
                 query="SELECT u.id, u.email FROM User u"),
     @NamedQuery(name="User.findByEmail",
                 query="SELECT u FROM User u WHERE u.email = :email"),
 }) 
-public class User {
+public class User implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String firstName;
 	private String lastName;
+	@Column(unique=true)
 	private String email;
 	private String password;
 	private String address;
+	@Temporal(value=TemporalType.DATE)
 	private Date birthDate;
+	@Temporal(value=TemporalType.DATE)
 	private Date registrationDate;
 	public Long getId() {
 		return id;

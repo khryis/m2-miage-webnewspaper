@@ -4,7 +4,7 @@
 
 <%@ page import="java.util.Arrays"%>
 <%@ page import="javax.ejb.EJB"%>
-<%@ page import="fr.miage.webnewspaper.bean.session.EJBLoginRemote"%>
+<%@ page import="fr.miage.webnewspaper.bean.session.EJBLoginAdminRemote"%>
 <%@ page import="java.util.Properties"%>
 <%@ page import="javax.naming.InitialContext"%>
 <%@ page import="javax.naming.Context"%>
@@ -19,15 +19,16 @@
 <body>
 	<div class="container">
 		<%!@EJB
-	EJBLoginRemote ejbLogin; %>
+	EJBLoginAdminRemote ejbLoginAdmin;%>
 		<%
-			ejbLogin = (EJBLoginRemote) session.getAttribute("ejbLogin");
-			if(ejbLogin == null || !ejbLogin.isLogged()){
-				response.sendRedirect("index.jsp");
+			ejbLoginAdmin = (EJBLoginAdminRemote) session
+					.getAttribute("ejbLoginAdmin");
+			if (ejbLoginAdmin == null || !ejbLoginAdmin.isLogged()) {
+				response.sendRedirect("index-admin.jsp");
 			}
 		%>
-		<a class="btn btn-default" href="logout.jsp">Deconnexion</a>
-		<h1>Accueil</h1>
+		<a class="btn btn-default" href="logout-admin.jsp">Deconnexion</a>
+		<h1>Accueil Administrateur</h1>
 	</div>
 </body>
 </html>

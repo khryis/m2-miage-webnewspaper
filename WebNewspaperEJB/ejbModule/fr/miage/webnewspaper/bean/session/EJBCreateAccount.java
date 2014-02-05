@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -27,13 +28,11 @@ public class EJBCreateAccount implements EJBCreateAccountRemote,
 	}
 
 	@Override
-	public Boolean createAccount(User u) {
+	public Boolean createAccount(User u) throws EntityExistsException {
 
 		if(!u.getEmail().isEmpty() && !u.getPassword().isEmpty()){
 			u.setRegistrationDate(new Date());
-			em.getTransaction().begin();
 			em.persist(u);
-			em.getTransaction().commit();
 			return true;
 		}else{
 			return false;

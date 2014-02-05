@@ -5,10 +5,10 @@
 <%@ page import="java.util.Arrays"%>
 <%@ page import="javax.ejb.EJB"%>
 <%@ page
-	import="fr.miage.webnewspaper.bean.session.EJBCreateAccountRemote"%>
+	import="fr.miage.webnewspaper.bean.session.EJBCreateAccountAdminRemote"%>
 <%@ page
-	import="fr.miage.webnewspaper.bean.session.EJBLoginRemote"%>
-<%@ page import="fr.miage.webnewspaper.bean.entity.User"%>
+	import="fr.miage.webnewspaper.bean.session.EJBLoginAdminRemote"%>
+<%@ page import="fr.miage.webnewspaper.bean.entity.Administrator"%>
 <%@ page import="java.util.Properties"%>
 <%@ page import="javax.naming.InitialContext"%>
 <%@ page import="javax.naming.Context"%>
@@ -19,15 +19,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
 <link href="css/bootstrap.min.css" rel="stylesheet" />
-<title>Create account</title>
+<title>Create account for admin</title>
 </head>
 
 <body>
 	<div class="container">
 		<%!@EJB
-	EJBCreateAccountRemote ejbCreateAccount;
+	EJBCreateAccountAdminRemote ejbCreateAccountAdmin;
 	@EJB
-	EJBLoginRemote ejbLogin;
+	EJBLoginAdminRemote ejbLoginAdmin;
 	String message = null;%>
 		<%
 			try {
@@ -37,31 +37,27 @@
 				props.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
 				Context context = new InitialContext(props);
 				if (context != null) {
-					ejbCreateAccount = (EJBCreateAccountRemote) context
-							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBCreateAccount!fr.miage.webnewspaper.bean.session.EJBCreateAccountRemote");
-					ejbLogin = (EJBLoginRemote) context
-							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBLogin!fr.miage.webnewspaper.bean.session.EJBLoginRemote");
+					ejbCreateAccountAdmin = (EJBCreateAccountAdminRemote) context
+							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBCreateAccountAdmin!fr.miage.webnewspaper.bean.session.EJBCreateAccountAdminRemote");
+					ejbLoginAdmin = (EJBLoginAdminRemote) context
+							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBLoginAdmin!fr.miage.webnewspaper.bean.session.EJBLoginAdminRemote");
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
 
 			if (request.getMethod() == "POST") {
-				User user = new User();
+				Administrator admin = new Administrator();
 				if (!request.getParameter("email").isEmpty()
 						&& !request.getParameter("password").isEmpty()) {
-					user.setAddress(request.getParameter("address"));
-					user.setEmail(request.getParameter("email"));
-					user.setPassword(request.getParameter("password"));
-					//user.setBirthDate(request.getParameter("birthDate"));
-					user.setFirstName(request.getParameter("firstName"));
-					user.setLastName(request.getParameter("lastName"));
-					if(ejbCreateAccount.createAccount(user)){
-						if(ejbLogin.checkUser(request.getParameter("email"), request.getParameter("password"))){
-							session.setAttribute("ejbLogin", ejbLogin);
-							response.sendRedirect("accueil.jsp");
+					admin.setEmail(request.getParameter("email"));
+					admin.setPassword(request.getParameter("password"));
+					if(ejbCreateAccountAdmin.createAccount(admin)){
+						if(ejbLoginAdmin.checkAdmin(request.getParameter("email"), request.getParameter("password"))){
+							session.setAttribute("ejbLoginAdmin", ejbLoginAdmin);
+							response.sendRedirect("accueil-admin.jsp");
 						}else{
-							response.sendRedirect("index.jsp");
+							response.sendRedirect("index-admin.jsp");
 						}
 					}else{
 						message = "Création du compte impossible";
@@ -72,11 +68,11 @@
 			}
 			pageContext.setAttribute("message", message);
 		%>
-		<h1>Création de compte</h1>
+		<h1>Création de compte pour un administrateur</h1>
 		<c:if test="${! empty pageScope.message}">
 			<span class='label label-warning'><c:out value="${pageScope.message}"></c:out></span>
 		</c:if>
-		<form action="create-account.jsp" method="POST">
+		<form action="create-account-admin.jsp" method="POST">
 			<div class="form-group">
 				<label>Adresse email</label> <input type="email"
 					class="form-control" name="email">
@@ -85,25 +81,9 @@
 				<label>Password</label> <input type="password" name="password"
 					class="form-control">
 			</div>
-			<div class="form-group">
-				<label>Prénom</label> <input type="text" name="firstName"
-					class="form-control">
-			</div>
-			<div class="form-group">
-				<label>Nom</label> <input type="text" name="lastName"
-					class="form-control">
-			</div>
-			<div class="form-group">
-				<label>Adresse</label> <input type="text" name="address"
-					class="form-control">
-			</div>
-			<div class="form-group">
-				<label>Anniversaire</label> <input type="date" name="birthDate"
-					class="form-control">
-			</div>
 			<button type="submit" class="btn btn-default">Se connecter</button>
 		</form>
-		<a href="accueil.jsp">Ecran d'accueil</a>
+		<a href="accueil-admin.jsp">Ecran d'accueil</a>
 	</div>
 </body>
 </html>
