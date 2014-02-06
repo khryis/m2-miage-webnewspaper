@@ -8,7 +8,7 @@
 	import="fr.miage.webnewspaper.bean.session.EJBCreateAccountRemote"%>
 <%@ page
 	import="fr.miage.webnewspaper.bean.session.EJBLoginRemote"%>
-<%@ page import="fr.miage.webnewspaper.bean.entity.User"%>
+<%@ page import="fr.miage.webnewspaper.bean.entity.Reader"%>
 <%@ page import="java.util.Properties"%>
 <%@ page import="javax.naming.InitialContext"%>
 <%@ page import="javax.naming.Context"%>
@@ -47,34 +47,47 @@
 			}
 
 			if (request.getMethod() == "POST") {
-				User user = new User();
+				Reader reader = new Reader();
+				// si au moins email, mot de passe est rempli, on crée un user pour envoyer à la méthode create de l'EJB
 				if (!request.getParameter("email").isEmpty()
 						&& !request.getParameter("password").isEmpty()) {
-					user.setAddress(request.getParameter("address"));
-					user.setEmail(request.getParameter("email"));
-					user.setPassword(request.getParameter("password"));
+					reader.setAddress(request.getParameter("address"));
+					reader.setEmail(request.getParameter("email"));
+					reader.setPassword(request.getParameter("password"));
 					//user.setBirthDate(request.getParameter("birthDate"));
-					user.setFirstName(request.getParameter("firstName"));
-					user.setLastName(request.getParameter("lastName"));
-					if(ejbCreateAccount.createAccount(user)){
-						if(ejbLogin.checkUser(request.getParameter("email"), request.getParameter("password"))){
-							session.setAttribute("ejbLogin", ejbLogin);
-							response.sendRedirect("accueil.jsp");
+					reader.setFirstName(request.getParameter("firstName"));
+					reader.setLastName(request.getParameter("lastName"));
+					
+					try{
+						// on essaie de créer un compte
+						if(ejbCreateAccount.createAccountReader(reader)){
+							//si crée, on envoi l'utilisateur à l'accueil 
+							if(ejbLogin.checkUser(request.getParameter("email"), request.getParameter("password"))){
+								session.setAttribute("ejbLogin", ejbLogin);
+								session.setAttribute("type", ejbLogin.getTypeOfUser());
+								response.sendRedirect("accueil.jsp");
+							}else{
+								// sinon retour à l'index
+								response.sendRedirect("index.jsp");
+							}
 						}else{
-							response.sendRedirect("index.jsp");
+							message = "Création du compte impossible";
 						}
-					}else{
-						message = "Création du compte impossible";
+					}catch(Exception e){
+						message = "Email déjà existant, création impossible";
 					}
 				}else{
 					message = "Vous devez au moins renseigner un email et un mot de passe";
 				}
+				
 			}
-			pageContext.setAttribute("message", message);
+			request.setAttribute("message", message);
 		%>
+		<a class="btn btn-default" href="accueil.jsp">Retour à l'index</a>
 		<h1>Création de compte</h1>
-		<c:if test="${! empty pageScope.message}">
-			<span class='label label-warning'><c:out value="${pageScope.message}"></c:out></span>
+		<c:if test="${requestScope.message != null}">
+			<span class='label label-warning'><c:out value="${requestScope.message}"></c:out></span>
+			<c:remove var="message" scope="request"/>
 		</c:if>
 		<form action="create-account.jsp" method="POST">
 			<div class="form-group">
@@ -103,7 +116,6 @@
 			</div>
 			<button type="submit" class="btn btn-default">Se connecter</button>
 		</form>
-		<a href="accueil.jsp">Ecran d'accueil</a>
 	</div>
 </body>
 </html>

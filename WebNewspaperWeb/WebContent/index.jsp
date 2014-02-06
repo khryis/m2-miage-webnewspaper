@@ -22,25 +22,11 @@
 	<div class="container">
 		<%!@EJB
 			EJBLoginRemote ejbLogin;
-			String message = null;
 		%>
 		<%
-			try {
-				ejbLogin = (EJBLoginRemote) session.getAttribute("ejbLogin");
-				if(ejbLogin.isLogged()){
-					response.sendRedirect("accueil.jsp");
-				}else{
-					Properties props = new Properties();
-					props.setProperty("org.omg.CORBA.ORBInitialHost", "localhost");
-					props.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
-					Context context = new InitialContext(props);
-					if (context != null) {
-						ejbLogin = (EJBLoginRemote) context.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBLogin!fr.miage.webnewspaper.bean.session.EJBLoginRemote");
-						session.setAttribute("ejbLogin", ejbLogin);
-					}
-				}
-			} catch (Exception e) {
-				System.err.println(e.getMessage());
+			ejbLogin = (EJBLoginRemote) session.getAttribute("ejbLogin");
+			if(ejbLogin != null && ejbLogin.isLogged()){
+				response.sendRedirect("accueil.jsp");
 			}
 		%>
 		<div>

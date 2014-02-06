@@ -23,12 +23,11 @@
 		<%!@EJB
 	EJBLoginRemote ejbLogin; %>
 		<%
+			// on nettoie la session
 			session.removeAttribute("ejbLogin");
-			if(session.getAttribute("ejbLogin") == null){
-				response.sendRedirect("index.jsp");
-			}else{
-				response.sendRedirect("accueil.jsp");
-			}
+			session.removeAttribute("type");
+			session.invalidate();
+			response.sendRedirect("index.jsp");
 		%>
 	</div>
 </body>

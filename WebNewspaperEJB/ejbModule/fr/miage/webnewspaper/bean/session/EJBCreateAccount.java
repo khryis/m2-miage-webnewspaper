@@ -8,7 +8,9 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import fr.miage.webnewspaper.bean.entity.User;
+import fr.miage.webnewspaper.bean.entity.Administrator;
+import fr.miage.webnewspaper.bean.entity.Journalist;
+import fr.miage.webnewspaper.bean.entity.Reader;
 
 /**
  * Session Bean implementation class EJBCreateAccount
@@ -28,11 +30,33 @@ public class EJBCreateAccount implements EJBCreateAccountRemote,
 	}
 
 	@Override
-	public Boolean createAccount(User u) throws EntityExistsException {
+	public Boolean createAccountReader(Reader r) throws EntityExistsException {
+		if(!r.getEmail().isEmpty() && !r.getPassword().isEmpty()){
+			r.setRegistrationDate(new Date());
+			em.persist(r);
+			return true;
+		}else{
+			return false;
+		}
+	}
 
-		if(!u.getEmail().isEmpty() && !u.getPassword().isEmpty()){
-			u.setRegistrationDate(new Date());
-			em.persist(u);
+	@Override
+	public Boolean createAccountJournalist(Journalist j)
+			throws EntityExistsException {
+		if(!j.getEmail().isEmpty() && !j.getPassword().isEmpty()){
+			j.setRegistrationDate(new Date());
+			em.persist(j);
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public Boolean createAccountAdministrator(Administrator a)
+			throws EntityExistsException {
+		if(!a.getEmail().isEmpty() && !a.getPassword().isEmpty()){
+			em.persist(a);
 			return true;
 		}else{
 			return false;

@@ -7,6 +7,9 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import fr.miage.webnewspaper.bean.entity.Administrator;
+import fr.miage.webnewspaper.bean.entity.Journalist;
+import fr.miage.webnewspaper.bean.entity.Reader;
 import fr.miage.webnewspaper.bean.entity.User;
 
 /**
@@ -23,7 +26,7 @@ public class EJBLogin implements EJBLoginRemote, EJBLoginLocal {
 	public EJBLogin() {
 	}
 	
-	public User getUser(String email){
+	private User fetchUser(String email){
 		TypedQuery<User> query = em.createNamedQuery("User.findByEmail", User.class);
 		query.setParameter("email", email);
 		try{
@@ -36,7 +39,7 @@ public class EJBLogin implements EJBLoginRemote, EJBLoginLocal {
 
 	@Override
 	public Boolean checkUser(String email, String password) {
-		User u = getUser(email);
+		User u = fetchUser(email);
 		if (u != null && u.getPassword().equals(password)) {
 			this.user = u;
 			return true;
@@ -59,4 +62,17 @@ public class EJBLogin implements EJBLoginRemote, EJBLoginLocal {
 		return user;
 	}
 
+	@Override
+	public String getTypeOfUser(){
+		if(user instanceof Reader){
+			return "R";
+		}
+		if(user instanceof Journalist){
+			return "J";
+		}
+		if(user instanceof Administrator){
+			return "A";
+		}
+		return "R";
+	}
 }
