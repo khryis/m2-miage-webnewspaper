@@ -12,9 +12,9 @@ import javax.persistence.Table;
 @DiscriminatorValue("J")
 @NamedQueries({
 	@NamedQuery(name="Journalist.findAll",
-            query="SELECT j FROM Article j"),
+            query="SELECT j FROM Journalist j"),
     @NamedQuery(name="Journalist.findById",
-            query="SELECT j FROM Article j WHERE j.id = :id"),
+            query="SELECT j FROM Journalist j WHERE j.id = :id"),
 })
 
 public class Journalist extends User{

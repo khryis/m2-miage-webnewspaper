@@ -6,13 +6,22 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.CascadeOnDelete;
+
 @Entity
 @Table(name="USER")
 @DiscriminatorValue("R")
+@NamedQueries({
+	@NamedQuery(name="Reader.findAll",
+				query="SELECT r FROM Reader r"),
+})
+@CascadeOnDelete
 public class Reader extends User {
 
 	private static final long serialVersionUID = 1L;

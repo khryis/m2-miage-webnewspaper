@@ -40,4 +40,6 @@ public interface EJBArticleRemote {
 	
 	public void deleteArticle(Long id);
 	
+	public void deleteComment(Long id);
+	
 }

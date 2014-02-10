@@ -5,7 +5,7 @@
 <%@ page import="java.util.Arrays"%>
 <%@ page import="javax.ejb.EJB"%>
 <%@ page
-	import="fr.miage.webnewspaper.bean.session.EJBCreateAccountRemote"%>
+	import="fr.miage.webnewspaper.bean.session.EJBAccountRemote"%>
 <%@ page
 	import="fr.miage.webnewspaper.bean.session.EJBLoginRemote"%>
 <%@ page import="fr.miage.webnewspaper.bean.entity.Reader"%>
@@ -25,7 +25,7 @@
 <body>
 	<div class="container">
 		<%!@EJB
-	EJBCreateAccountRemote ejbCreateAccount;
+	EJBAccountRemote ejbAccount;
 	@EJB
 	EJBLoginRemote ejbLogin;
 	String message = null;%>
@@ -33,8 +33,8 @@
 			try {
 				Context context = new InitialContext();
 				if (context != null) {
-					ejbCreateAccount = (EJBCreateAccountRemote) context
-							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBCreateAccount!fr.miage.webnewspaper.bean.session.EJBCreateAccountRemote");
+					ejbAccount = (EJBAccountRemote) context
+							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBAccount!fr.miage.webnewspaper.bean.session.EJBAccountRemote");
 					ejbLogin = (EJBLoginRemote) context
 							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBLogin!fr.miage.webnewspaper.bean.session.EJBLoginRemote");
 				}
@@ -56,7 +56,7 @@
 					
 					try{
 						// on essaie de créer un compte
-						if(ejbCreateAccount.createAccountReader(reader)){
+						if(ejbAccount.createAccountReader(reader)){
 							//si crée, on envoi l'utilisateur à l'accueil 
 							if(ejbLogin.checkUser(request.getParameter("email"), request.getParameter("password"))){
 								session.setAttribute("ejbLogin", ejbLogin);

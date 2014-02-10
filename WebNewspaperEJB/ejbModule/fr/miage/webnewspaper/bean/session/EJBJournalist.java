@@ -34,13 +34,6 @@ public class EJBJournalist implements EJBJournalistRemote {
 	}
 
 	@Override
-	public void addJournalist(Journalist j) {
-		j.setStatus("off");
-		em.persist(j);
-		em.flush();
-	}
-
-	@Override
 	public void deleteJournalist(Long id) {
 		Journalist j = em.find(Journalist.class, id);
 		em.remove(j);

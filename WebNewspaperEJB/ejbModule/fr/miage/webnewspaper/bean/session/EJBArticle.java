@@ -195,4 +195,12 @@ public class EJBArticle implements EJBArticleRemote, EJBArticleLocal {
 		em.flush();
 	}
 	
+	@Override
+	public void deleteComment(Long id){
+		Comment comment = em.find(Comment.class, id);
+		em.merge(comment);
+		em.remove(comment);
+		em.flush();
+	}
+	
 }

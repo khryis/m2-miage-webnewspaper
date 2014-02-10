@@ -21,7 +21,8 @@ import fr.miage.webnewspaper.bean.session.EJBLoginRemote;
 @WebFilter(dispatcherTypes = { DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR}, 
 		urlPatterns = { "/accueil.jsp", "/view-article.jsp", "/add-article.jsp",
 						"/modify-article.jsp", "/read-article.jsp", "/subscribe.jsp",
-						"/logout.jsp", "/rate.jsp", "/comment.jsp",})
+						"/logout.jsp", "/rate.jsp", "/comment.jsp","/add-journalist.jsp",
+						"/liste-reader.jsp"})
 public class FilterLogin implements Filter {
 
 	private String contextPath;

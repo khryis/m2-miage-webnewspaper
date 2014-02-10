@@ -27,6 +27,9 @@
 		<%!@EJB
 	EJBArticleRemote ejbArticle;%>
 		<%
+			if(!session.getAttribute("type").equals("J")){
+				response.sendRedirect("logout.jsp");
+			}
 			try {
 				// On ajuste les propriétés pour récupérer l'ejb distant
 				Context context = new InitialContext();

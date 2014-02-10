@@ -11,8 +11,6 @@ public interface EJBJournalistRemote {
 
 	public List<Journalist> getAll();
 	
-	public void addJournalist(Journalist j);
-	
 	public void deleteJournalist(Long id);
 	
 	public void updateJournalist(Journalist j);

@@ -27,6 +27,9 @@
 	EJBArticleRemote ejbArticle;
 	EJBLoginRemote ejbLogin;%>
 	<%
+		if(!session.getAttribute("type").equals("R")){
+			response.sendRedirect("logout.jsp");
+		}
 		try {
 			Context context = new InitialContext();
 			if (context != null) {

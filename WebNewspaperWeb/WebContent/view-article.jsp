@@ -93,7 +93,7 @@
 					</c:if>	
 					<c:forEach items="${requestScope.comments}" var="comment">
 						<div class="well">
-							<p>${comment.writer.firstName} le <fmt:formatDate value="${comment.commentDate}" pattern="dd-MM-yyyy" /></p>
+							<p>${comment.writer.firstName} le <fmt:formatDate value="${comment.commentDate}" pattern="dd MMM yyyy" /></p>
 							<p>${comment.content}</p>
 						</div>
 					</c:forEach>

@@ -22,6 +22,9 @@
 	<%!@EJB
 	EJBArticleRemote ejbArticle;%>
 	<%
+		if(!session.getAttribute("type").equals("J")){
+			response.sendRedirect("logout.jsp");
+		}
 		try {
 			Context context = new InitialContext();
 			if (context != null) {

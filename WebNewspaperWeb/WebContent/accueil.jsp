@@ -4,12 +4,11 @@
 
 <%@ page import="java.util.Arrays"%>
 <%@ page import="javax.ejb.EJB"%>
-<%@ page import="fr.miage.webnewspaper.bean.session.EJBLoginRemote"%>
 <%@ page import="fr.miage.webnewspaper.bean.session.EJBArticleRemote"%>
+<%@ page import="fr.miage.webnewspaper.bean.session.EJBAccountRemote"%>
 <%@ page import="fr.miage.webnewspaper.bean.entity.Article"%>
 <%@ page import="fr.miage.webnewspaper.bean.entity.User"%>
 <%@ page import="fr.miage.webnewspaper.bean.entity.Journalist"%>
-<%@ page import="fr.miage.webnewspaper.bean.entity.Reader"%>
 <%@ page import="java.util.Properties"%>
 <%@ page import="javax.naming.InitialContext"%>
 <%@ page import="javax.naming.Context"%>
@@ -30,7 +29,7 @@
 		<%!@EJB
 	EJBArticleRemote ejbArticle;
 		@EJB
-	EJBJournalistRemote ejbJournalist;%>
+	EJBAccountRemote ejbAccount;%>
 		<%
 			try {
 				// On ajuste les propriétés pour récupérer l'ejb distant
@@ -38,7 +37,7 @@
 				if (context != null) {
 					ejbArticle = (EJBArticleRemote) context
 							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBArticle!fr.miage.webnewspaper.bean.session.EJBArticleRemote");
-					ejbJournalist = (EJBJournalistRemote)context.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBJournalist!fr.miage.webnewspaper.bean.session.EJBJournalistRemote");
+					ejbAccount = (EJBAccountRemote)context.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBAccount!fr.miage.webnewspaper.bean.session.EJBAccountRemote");
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
@@ -59,7 +58,8 @@
 					}
 				}else if(session.getAttribute("type").equals("A")){
 					articles = ejbArticle.getAll();
-					List<Journalist> journalists = ejbJournalist.getAll();
+					request.setAttribute("articles", articles);
+					List<Journalist> journalists = ejbAccount.getAllJournalists();
 					request.setAttribute("journalists", journalists);
 				}
 			}
@@ -264,10 +264,12 @@
 			</div>
 
 			<div class="row">
+				<a class="btn btn-default" href="add-journalist.jsp">Ajouter un journaliste</a>
+				<a class="btn btn-default" href="liste-reader.jsp">Supprimer un Lecteur</a>
 				<a class="btn btn-default" href="logout.jsp">Me déconnecter</a>
 			</div>
-
-			<div class="row well">
+			<hr/>
+			<div class="row">
 				<div class="col-md-6">
 					<div class="panel panel-default">
 						<div class="panel-heading">Articles en Ligne (Validés)</div>
@@ -277,7 +279,7 @@
 									<div class="row">
 										<span class="col-md-6">${article.title}</span> <a
 											class="col-md-offset-3 col-md-2"
-											href="commentaires-article.jsp?id=${article.id}"><span
+											href="article-comments.jsp?id=${article.id}"><span
 											class="glyphicon glyphicon-search">Commentaires</span></a>
 									</div>
 								</c:if>
@@ -287,14 +289,14 @@
 				</div>
 				<div class="col-md-6">
 					<div class="panel panel-default">
-						<div class="panel-heading">Liste des journalistes actif</div>
+						<div class="panel-heading">Liste des journalistes actifs</div>
 						<div class="panel-body">
 							<c:forEach items="${requestScope.journalists}" var="journalist">
-								<c:if test="${journalis.status == 'actif'}">
+								<c:if test="${journalist.status == 'actif'}">
 									<div class="row">
-										<span class="col-md-6">${journalist.firstName}
-											${journalist.lastName}</span> <a class="col-md-offset-3 col-md-2"
-											href="modify-journalist.jsp?id=${article.id}"><span
+										<span class="col-md-8">${journalist.firstName}
+											${journalist.lastName}</span> <a class="col-md-offset-2 col-md-2"
+											href="modify-journalist.jsp?id=${journalist.id}"><span
 											class="glyphicon glyphicon-pencil"></span></a>
 									</div>
 								</c:if>

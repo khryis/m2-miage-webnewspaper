@@ -27,6 +27,9 @@
 		<%!@EJB
 	EJBArticleRemote ejbArticle;%>
 		<%
+			if(!session.getAttribute("type").equals("J")){
+				response.sendRedirect("logout.jsp");
+			}
 			try {
 				// On ajuste les propriétés pour récupérer l'ejb distant
 				Context context = new InitialContext();
@@ -37,7 +40,6 @@
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
-		
 			if(request.getMethod().equals("POST")){
 				String title = request.getParameter("title");
 				String content = request.getParameter("content");
