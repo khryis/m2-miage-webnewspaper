@@ -24,7 +24,7 @@ public class Reader extends User {
 	private List<Comment> comments;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
-	private List<Article> readArticles;
+	private List<Article> buyArticles;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private Subscription subscription;
@@ -45,12 +45,12 @@ public class Reader extends User {
 		this.comments = comments;
 	}
 
-	public List<Article> getReadArticles() {
-		return readArticles;
+	public List<Article> getBuyArticles() {
+		return buyArticles;
 	}
 
-	public void setReadArticles(List<Article> readArticles) {
-		this.readArticles = readArticles;
+	public void setBuyArticles(List<Article> readArticles) {
+		this.buyArticles = readArticles;
 	}
 
 	public Subscription getSubscription() {

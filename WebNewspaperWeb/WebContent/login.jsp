@@ -5,6 +5,9 @@
 <%@ page import="java.util.Arrays"%>
 <%@ page import="javax.ejb.EJB"%>
 <%@ page import="fr.miage.webnewspaper.bean.session.EJBLoginRemote"%>
+<%@ page import="fr.miage.webnewspaper.bean.entity.User"%>
+<%@ page import="fr.miage.webnewspaper.bean.entity.Reader"%>
+<%@ page import="fr.miage.webnewspaper.bean.entity.Subscription"%>
 <%@ page import="java.util.Properties"%>
 <%@ page import="javax.naming.InitialContext"%>
 <%@ page import="javax.naming.Context"%>
@@ -24,19 +27,12 @@
 	String message = null;%>
 		<%
 			try {
-
-				// On ajuste les propriétés pour récupérer l'ejb distant
-				Properties props = new Properties();
-				props.setProperty("org.omg.CORBA.ORBInitialHost", "localhost");
-				props.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
-				Context context = new InitialContext(props);
+				Context context = new InitialContext();
 				if (context != null) {
 					ejbLogin = (EJBLoginRemote) context
 							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBLogin!fr.miage.webnewspaper.bean.session.EJBLoginRemote");
 					// on stock l'ejb stateful dans la session
 					session.setAttribute("ejbLogin", ejbLogin);
-					// on stock le type d'utilisateur de la session
-					session.setAttribute("type", ejbLogin.getTypeOfUser());
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
@@ -51,6 +47,16 @@
 					if (ejbLogin.checkUser(request.getParameter("email"),
 							request.getParameter("password"))) {
 						//l'utilisateur est connecté
+						User user = ejbLogin.getUser();
+						String userType = ejbLogin.getTypeOfUser();
+						request.getSession().setAttribute("type", userType);
+						request.getSession().setAttribute("user", user);
+						if (user instanceof Reader){
+							Subscription subscription = ejbLogin.getSubscription((Reader)user);
+							if(subscription != null){
+								request.getSession().setAttribute("subscription", subscription);
+							}
+						}
 						response.sendRedirect("accueil.jsp");
 					} else {
 						message = "Aucun n'utilisateur connu pour ces identifiants";

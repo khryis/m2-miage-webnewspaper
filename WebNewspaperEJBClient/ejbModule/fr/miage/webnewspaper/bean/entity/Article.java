@@ -1,5 +1,6 @@
 package fr.miage.webnewspaper.bean.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -24,8 +24,11 @@ import javax.persistence.TemporalType;
                 query="SELECT a FROM Article a"),
     @NamedQuery(name="Article.findById",
                 query="SELECT a FROM Article a WHERE a.id = :id"),
+    @NamedQuery(name="Article.findByWriter",
+                query="SELECT a FROM Article a WHERE a.journalist = :journalist"),
 }) 
-public class Article {
+public class Article implements Serializable, Cloneable{
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -42,8 +45,9 @@ public class Article {
 	private List<Rate> rates;
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<Comment> comments;
-	@ManyToMany(fetch = FetchType.LAZY)
-	private List<Reader> readers;
+	
+	public Article(){
+	}
 	
 	public Long getId() {
 		return id;
@@ -99,10 +103,8 @@ public class Article {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
-	public List<Reader> getReaders() {
-		return readers;
-	}
-	public void setReaders(List<Reader> readers) {
-		this.readers = readers;
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

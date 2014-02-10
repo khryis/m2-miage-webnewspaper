@@ -31,11 +31,7 @@
 	String message = null;%>
 		<%
 			try {
-
-				Properties props = new Properties();
-				props.setProperty("org.omg.CORBA.ORBInitialHost", "localhost");
-				props.setProperty("org.omg.CORBA.ORBInitialPort", "3700");
-				Context context = new InitialContext(props);
+				Context context = new InitialContext();
 				if (context != null) {
 					ejbCreateAccount = (EJBCreateAccountRemote) context
 							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBCreateAccount!fr.miage.webnewspaper.bean.session.EJBCreateAccountRemote");

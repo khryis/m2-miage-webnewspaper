@@ -13,12 +13,13 @@
 <%@ page import="javax.naming.Context"%>
 <%@ page import="java.util.List"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Index du site</title>
+<title>Preview d'article</title>
 <link href="css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -27,7 +28,6 @@
 	EJBArticleRemote ejbArticle;%>
 		<%
 			try {
-				// On ajuste les propriétés pour récupérer l'ejb distant
 				Context context = new InitialContext();
 				if (context != null) {
 					ejbArticle = (EJBArticleRemote) context
@@ -36,46 +36,28 @@
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
-			List<Article> articles = ejbArticle.getAll();
-			request.setAttribute("articles", articles);
+			Article article = ejbArticle.previewArticle(Long.valueOf(request.getParameter("id")));
+			request.setAttribute("article", article);
+			request.setAttribute("rates", ejbArticle.getRates(article));
+			request.setAttribute("meanRate", ejbArticle.getMeanRates(article));
 		%>
 		<div class="row">
-			<h1>Bienvenue</h1>
-		</div>
-
-		<div class="row">
-			<a class="btn btn-default" href="login.jsp">Me connecter</a> <a
-				class="btn btn-default" href="create-account.jsp">Créer un
-				compte</a>
+			<a class="btn btn-default" href="login.jsp">Me connecter</a>
+			<a class="btn btn-default" href="index.jsp">Retour à l'index</a>
 		</div>
 		<hr/>
 		<div class="row">
-			<div class="col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">Derniers articles</div>
-					<div class="panel-body">
-						<ul>
-							<c:forEach items="${requestScope.articles}" var="article">
-								<c:if test="${article.isValidated}">
-									<li><a href="preview-article.jsp?id=${article.id}">${article.title}</a></li>
-								</c:if>
-							</c:forEach>
-						</ul>
-					</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<span>Title : ${requestScope.article.title}</span>
+					<span>, écrit par ${requestScope.article.journalist.firstName} ${requestScope.article.journalist.lastName}</span>
+					<p>${requestScope.meanRate}/5 (${fn:length(requestScope.rates)})</p>
 				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">Liste des articles</div>
-					<div class="panel-body">
-						<ul>
-							<c:forEach items="${requestScope.articles}" var="article">
-								<c:if test="${article.isValidated}">
-									<li><a href="preview-article.jsp?id=${article.id}">${article.title}</a></li>
-								</c:if>
-							</c:forEach>
-						</ul>
-					</div>
+				<div class="panel-body">
+					<p>${article.content}</p>
+				</div>
+				<div class="panel-footer">
+					<a class="btn btn-default" href="buy-article.jsp?id=${article.id}">Acheter l'article</a>
 				</div>
 			</div>
 		</div>
