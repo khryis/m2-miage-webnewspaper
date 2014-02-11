@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+
+.table tbody tr th{
+	border-top: none;
+}
+
+.table tbody tr td a .glyphicon{
+	text-align: center;
+}

@@ -58,9 +58,9 @@
 		<div class="row">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<span>Title : ${requestScope.article.title}</span>
+					<span>Titre : ${requestScope.article.title}</span>
 					<span>, écrit par ${requestScope.article.journalist.firstName} ${requestScope.article.journalist.lastName}</span>
-					<p>${requestScope.meanRate}/5 (${fn:length(requestScope.rates)})</p>
+					<p><span class="label label-success">${requestScope.meanRate}/5 (${fn:length(requestScope.rates)} votes)</span></p>
 				</div>
 				<div class="panel-body">
 					<p>${article.content}</p>

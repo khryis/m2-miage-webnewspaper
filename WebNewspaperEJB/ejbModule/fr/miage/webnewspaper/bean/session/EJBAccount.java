@@ -20,8 +20,7 @@ import fr.miage.webnewspaper.bean.entity.User;
  */
 @Stateless
 @LocalBean
-public class EJBAccount implements EJBAccountRemote,
-		EJBAccountLocal {
+public class EJBAccount implements EJBAccountRemote, EJBAccountLocal {
 
 	@PersistenceContext(unitName = "WebNewspaperEJB")
 	EntityManager em;
@@ -34,11 +33,11 @@ public class EJBAccount implements EJBAccountRemote,
 
 	@Override
 	public Boolean createAccountReader(Reader r) throws EntityExistsException {
-		if(!r.getEmail().isEmpty() && !r.getPassword().isEmpty()){
+		if (!r.getEmail().isEmpty() && !r.getPassword().isEmpty()) {
 			r.setRegistrationDate(new Date());
 			em.persist(r);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -46,12 +45,12 @@ public class EJBAccount implements EJBAccountRemote,
 	@Override
 	public Boolean createAccountJournalist(Journalist j)
 			throws EntityExistsException {
-		if(!j.getEmail().isEmpty() && !j.getPassword().isEmpty()){
+		if (!j.getEmail().isEmpty() && !j.getPassword().isEmpty()) {
 			j.setRegistrationDate(new Date());
 			j.setStatus("actif");
 			em.persist(j);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -59,24 +58,31 @@ public class EJBAccount implements EJBAccountRemote,
 	@Override
 	public Boolean createAccountAdministrator(Administrator a)
 			throws EntityExistsException {
-		if(!a.getEmail().isEmpty() && !a.getPassword().isEmpty()){
+		if (!a.getEmail().isEmpty() && !a.getPassword().isEmpty()) {
 			em.persist(a);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
 	@Override
 	public List<Journalist> getAllJournalists() {
-		TypedQuery<Journalist> journalists = em.createNamedQuery("Journalist.findAll", Journalist.class);
+		TypedQuery<Journalist> journalists = em.createNamedQuery(
+				"Journalist.findAll", Journalist.class);
 		return journalists.getResultList();
 	}
 
 	@Override
 	public List<Reader> getAllReaders() {
-		TypedQuery<Reader> readers = em.createNamedQuery("Reader.findAll", Reader.class);
+		TypedQuery<Reader> readers = em.createNamedQuery("Reader.findAll",
+				Reader.class);
 		return readers.getResultList();
+	}
+
+	@Override
+	public User getUser(Long id) {
+		return em.find(User.class, id);
 	}
 
 	@Override

@@ -17,8 +17,8 @@
 		<properties>
 			<property name="javax.persistence.target-database" value="MYSQL" />
 			<property name="javax.persistence.logging.level" value="FINEST" />
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
-<!-- 			<property name="eclipselink.ddl-generation" value="create-tables"/> -->
+<!-- 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/> -->
+			<property name="eclipselink.ddl-generation" value="create-tables"/>
 		</properties>
 	</persistence-unit>
 </persistence>

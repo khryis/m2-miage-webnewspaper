@@ -22,6 +22,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="css/bootstrap.min.css" rel="stylesheet" />
+<link href="css/style.css" rel="stylesheet" />
 <title>Accueil</title>
 </head>
 <body>
@@ -146,21 +147,28 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">Mes Articles</div>
 							<div class="panel-body">
-								<c:forEach items="${requestScope.articles}" var="article">
-									<c:if test="${article.isValidated}">
-										<div class="row">
-											<span class="col-md-5">${article.title}</span> <a
-												class="col-md-offset-1 col-md-1"
-												href="read-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-search"></span></a>
-											<c:if test="${sessionScope.user.isChiefEditor}">
-												<a class="col-md-1"
-													href="delete-article.jsp?id=${article.id}"><span
-													class="glyphicon glyphicon-Remove"></span></a>
-											</c:if>
-										</div>
-									</c:if>
-								</c:forEach>
+								<table class="table table-condensed">
+									<tr>
+										<th class="col-md-8 col-sm-8">Titre</th>
+										<th>Voir</th>
+										<c:if test="${sessionScope.user.isChiefEditor}">
+											<th>Supprimer</th>
+										</c:if>	
+									</tr>
+									<c:forEach items="${requestScope.articles}" var="article">
+										<c:if test="${article.isValidated}">
+											<tr>
+												<td><span class="col-md-8 col-sm-8">${article.title}</span></td>
+												<td><a href="read-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-search"></span></a></td>
+												<c:if test="${sessionScope.user.isChiefEditor}">
+													<td>
+														<a href="delete-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-Remove"></span></a>
+													</td>
+												</c:if>
+											</tr>
+										</c:if>
+									</c:forEach>
+								</table>	
 							</div>
 						</div>
 					</div>
@@ -168,23 +176,30 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">Articles non validé</div>
 							<div class="panel-body">
-								<c:forEach items="${requestScope.articles}" var="article">
-									<c:if test="${not article.isValidated}">
-										<div class="row">
-											<span class="col-md-5">${article.title}</span> <a
-												class="col-md-offset-1 col-md-1"
-												href="read-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-search"></span></a> <a
-												class="col-md-1" href="modify-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-pencil"></span></a>
-											<c:if test="${sessionScope.user.isChiefEditor}">
-												<a class="col-md-1"
-													href="delete-article.jsp?id=${article.id}"><span
-													class="glyphicon glyphicon-Remove"></span></a>
-											</c:if>
-										</div>
-									</c:if>
-								</c:forEach>
+								<table class="table table-condensed">
+									<tr>
+										<th class="col-md-8 col-sm-8">Titre</th>
+										<th>Voir</th>
+										<th>Modifier</th>
+										<c:if test="${sessionScope.user.isChiefEditor}">
+											<th>Supprimer</th>
+										</c:if>	
+									</tr>
+									<c:forEach items="${requestScope.articles}" var="article">
+										<c:if test="${not article.isValidated}">
+											<tr>
+												<td class="col-md-8 col-sm-8"><span>${article.title}</span></td> 
+												<td><a href="read-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-search"></span></a></td>
+												<td><a href="modify-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+												<c:if test="${sessionScope.user.isChiefEditor}">
+													<td>
+														<a href="delete-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-Remove"></span></a>
+													</td>
+												</c:if>
+											</tr>
+										</c:if>
+									</c:forEach>
+								</table>	
 							</div>
 						</div>
 					</div>
@@ -210,18 +225,22 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">Tout les Articles</div>
 							<div class="panel-body">
-								<c:forEach items="${requestScope.allArticles}" var="article">
-									<c:if test="${article.isValidated}">
-										<div class="row">
-											<span class="col-md-5">${article.title}</span> <a
-												class="col-md-offset-1 col-md-1"
-												href="read-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-search"></span></a> <a
-												class="col-md-1" href="delete-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-remove"></span></a>
-										</div>
-									</c:if>
-								</c:forEach>
+								<table class="table table-condensed">
+									<tr>
+										<th class="col-md-8 col-sm-8">Titre</th>
+										<th>Voir</th>
+										<th>Supprimer</th>
+									</tr>
+									<c:forEach items="${requestScope.allArticles}" var="article">
+										<c:if test="${article.isValidated}">
+											<tr>
+												<td class="col-md-8 col-sm-8"><span>${article.title}</span></td>
+												<td><a href="read-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-search"></span></a></td> 
+												<td><a href="delete-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-remove"></span></a></td>
+											</tr>
+										</c:if>
+									</c:forEach>
+								</table>	
 							</div>
 						</div>
 					</div>
@@ -229,23 +248,26 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">Tout les Articles non validé</div>
 							<div class="panel-body">
-								<c:forEach items="${requestScope.allArticles}" var="article">
-									<c:if test="${not article.isValidated}">
-										<div class="row">
-											<span class="col-md-5">${article.title}</span> <a
-												class="col-md-offset-1 col-md-1"
-												href="read-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-search"></span></a> <a
-												class="col-md-1" href="modify-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-pencil"></span></a> <a
-												class="col-md-1"
-												href="validate-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-ok"></span></a> <a class="col-md-1"
-												href="delete-article.jsp?id=${article.id}"><span
-												class="glyphicon glyphicon-remove"></span></a>
-										</div>
-									</c:if>
-								</c:forEach>
+								<table class="table table-condensed">
+									<tr>
+										<th class="col-md-6 col-sm-6">Titre</th>
+										<th>Voir</th>
+										<th>Modifier</th>
+										<th>Valider</th>
+										<th>Supprimer</th>
+									</tr>
+									<c:forEach items="${requestScope.allArticles}" var="article">
+										<c:if test="${not article.isValidated}">
+											<tr>
+												<td ><span>${article.title}</span></td> 
+												<td><a href="read-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-search"></span></a></td> 
+												<td><a href="modify-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-pencil"></span></a></td> 
+												<td><a href="validate-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-ok"></span></a></td> 
+												<td><a href="delete-article.jsp?id=${article.id}"><span class="glyphicon glyphicon-remove"></span></a></td>
+											</tr>
+										</c:if>
+									</c:forEach>
+								</table>	
 							</div>
 						</div>
 					</div>
@@ -272,18 +294,22 @@
 			<div class="row">
 				<div class="col-md-6">
 					<div class="panel panel-default">
-						<div class="panel-heading">Articles en Ligne (Validés)</div>
+						<div class="panel-heading">Articles en Ligne (Validés) - Modération des commentaires</div>
 						<div class="panel-body">
-							<c:forEach items="${requestScope.articles}" var="article">
-								<c:if test="${article.isValidated}">
-									<div class="row">
-										<span class="col-md-6">${article.title}</span> <a
-											class="col-md-offset-3 col-md-2"
-											href="article-comments.jsp?id=${article.id}"><span
-											class="glyphicon glyphicon-search">Commentaires</span></a>
-									</div>
-								</c:if>
-							</c:forEach>
+							<table class="table table-condensed">
+								<tr>
+									<th class="col-md-6 col-sm-6">Titre</th>
+									<th>Modérer</th>
+								</tr>
+								<c:forEach items="${requestScope.articles}" var="article">
+									<c:if test="${article.isValidated}">
+										<tr>
+											<td class="col-md-6 col-sm-6">${article.title}</td>
+											<td><a href="article-comments.jsp?id=${article.id}"><span class="glyphicon glyphicon-search"></span></a></td>
+										</tr>
+									</c:if>
+								</c:forEach>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -291,22 +317,63 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">Liste des journalistes actifs</div>
 						<div class="panel-body">
-							<c:forEach items="${requestScope.journalists}" var="journalist">
-								<c:if test="${journalist.status == 'actif'}">
-									<div class="row">
-										<span class="col-md-8">${journalist.firstName}
-											${journalist.lastName}</span> <a class="col-md-offset-2 col-md-2"
-											href="modify-journalist.jsp?id=${journalist.id}"><span
-											class="glyphicon glyphicon-pencil"></span></a>
-									</div>
-								</c:if>
-							</c:forEach>
+							<table class="table table-condensed">
+								<tr>
+									<th class="col-md-6 col-sm-6">Titre</th>
+									<th>Chef Rédacteur</th>
+									<th>Modifier</th>
+								</tr>
+								<c:forEach items="${requestScope.journalists}" var="journalist">
+									<c:if test="${journalist.status == 'actif'}">
+										<tr>
+											<td class="col-md-6 col-sm-6">${journalist.firstName} ${journalist.lastName}</td>
+											<td>
+												<c:if test="${journalist.isChiefEditor}">
+													<span class="glyphicon glyphicon-star"></span>
+												</c:if>
+											</td> 
+											<td><a href="modify-journalist.jsp?id=${journalist.id}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+										</tr>
+									</c:if>
+								</c:forEach>
+							</table>	
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-6 col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Liste des journalistes inactifs</div>
+						<div class="panel-body">
+							<table class="table table-condensed">
+								<tr>
+									<th class="col-md-6 col-sm-6">Titre</th>
+									<th>Chef Rédacteur</th>
+									<th>Modifier</th>
+								</tr>
+								<c:forEach items="${requestScope.journalists}" var="journalist">
+									<c:if test="${journalist.status == 'inactif'}">
+										<tr>
+											<td class="col-md-6 col-sm-6">${journalist.firstName} ${journalist.lastName}</td>
+											<td>
+												<c:if test="${journalist.isChiefEditor}">
+													<span class="glyphicon glyphicon-star"></span>
+												</c:if>
+											</td> 
+											<td><a href="modify-journalist.jsp?id=${journalist.id}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+										</tr>
+									</c:if>
+								</c:forEach>
+							</table>
 						</div>
 					</div>
 				</div>
 			</div>
 		</c:if>
 		<!-- ------------------------------------  -->
+		
+		
 	</div>
 </body>
 </html>

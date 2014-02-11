@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,9 +42,9 @@ public class Article implements Serializable, Cloneable{
 	private Boolean isValidated;
 	@OneToOne(fetch = FetchType.EAGER)
 	private Journalist journalist;
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval=true, mappedBy="ofArticle", cascade={CascadeType.ALL})
 	private List<Rate> rates;
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval=true, mappedBy="ofArticle", cascade={CascadeType.ALL})
 	private List<Comment> comments;
 	
 	public Article(){

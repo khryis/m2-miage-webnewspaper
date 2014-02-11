@@ -169,6 +169,7 @@ public class EJBArticle implements EJBArticleRemote, EJBArticleLocal {
 	@Override
 	public Article getArticle(Long id) {
 		Article article = em.find(Article.class, id);
+		em.refresh(article);
 		article.getComments().size();
 		return article;
 	}

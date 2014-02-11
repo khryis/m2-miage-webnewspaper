@@ -30,12 +30,8 @@
 		<%!@EJB
 	EJBArticleRemote ejbArticle;%>
 		<%
-			System.err.println("type : "+session.getAttribute("type").toString());
-			System.err.println("type : "+session.getAttribute("type").getClass().toString());
 			if(session != null){
-				System.err.println("Boolean : "+session.getAttribute("type").toString().equals("A"));
 				if(!(session.getAttribute("type").toString().equals("A"))){
-					System.err.println("Pourquoi je passe la dedans ???");
 					response.sendRedirect("logout.jsp");
 				}
 			}	
@@ -57,7 +53,6 @@
 			Article article = ejbArticle.getArticle(Long.valueOf(request.getParameter("id")));
 			request.setAttribute("article", article);
 			request.setAttribute("comments", article.getComments());
-			EJBLoginRemote ejbLogin = (EJBLoginRemote)session.getAttribute("ejbLogin");
 		%>
 		<div class="row">
 			<a class="btn btn-default" href="accueil.jsp">Retour à l'accueil</a>

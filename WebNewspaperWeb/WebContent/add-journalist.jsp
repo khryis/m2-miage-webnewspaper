@@ -14,7 +14,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="css/bootstrap.min.css" rel="stylesheet" />
 <title>Création d'un Journaliste</title>
 </head>
@@ -23,8 +23,6 @@
 	<div class="container">
 		<%!@EJB
 		EJBAccountRemote ejbAccount;
-		@EJB
-		EJBLoginRemote ejbLogin;
 		String message = null;%>
 		<%
 			if(!session.getAttribute("type").equals("A")){
@@ -33,12 +31,9 @@
 			try {
 				Context context = new InitialContext();
 				if (context != null) {
-					ejbLogin = (EJBLoginRemote) context
-							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBLogin!fr.miage.webnewspaper.bean.session.EJBLoginRemote");
-					ejbAccount = (EJBAccountRemote) context
-							.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBAccount!fr.miage.webnewspaper.bean.session.EJBAccountRemote");
+					ejbAccount = (EJBAccountRemote)context.lookup("java:global/WebNewspaper/WebNewspaperEJB/EJBAccount!fr.miage.webnewspaper.bean.session.EJBAccountRemote");
 				}
-			} catch (Exception e) {
+			}catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
 			if (request.getMethod() == "POST") {
@@ -52,7 +47,8 @@
 					//user.setBirthDate(request.getParameter("birthDate"));
 					journalist.setFirstName(request.getParameter("firstName"));
 					journalist.setLastName(request.getParameter("lastName"));
-					if(request.getParameter("firstName").equals("true")){
+					journalist.setStatus("actif");
+					if(request.getParameter("isChief").equals("true")){
 						journalist.setIsChiefEditor(true);	
 					}
 					try {
@@ -63,7 +59,6 @@
 						message = "Création impossible";
 						System.err.println(e.getMessage());
 					}
-				} else {
 					message = "Vous devez au moins renseigner un email et un mot de passe";
 				}
 
@@ -75,34 +70,31 @@
 		<c:if test="${requestScope.message != null}">
 			<span class="label label-warning">${requestScope.message}</span>
 		</c:if>
-		<form action="add-journalist.jsp" method="POST">
-			<div class="form-group">
-				<label>Adresse email</label> <input type="email"
-					class="form-control" name="email">
-			</div>
-			<div class="form-group">
-				<label>Password</label> <input type="password" name="password"
-					class="form-control">
-			</div>
-			<div class="form-group">
-				<label>Prénom</label> <input type="text" name="firstName"
-					class="form-control">
-			</div>
-			<div class="form-group">
-				<label>Nom</label> <input type="text" name="lastName"
-					class="form-control">
-			</div>
-			<div class="radio">
-				<label><input type="radio" name="optionsRadios"
-					id="optionsRadios1" value="false">Journaliste</label>
-			</div>
-			<div class="radio">
-				<label><input type="radio" name="optionsRadios"
-					id="optionsRadios2" value="true">Rédacteur en chef</label>
-			</div>
-			<button type="submit" class="btn btn-default">Ajouter le
-				journaliste</button>
-		</form>
+		<div class="row">
+			<div class="col-md-6">
+				<form action="add-journalist.jsp" method="POST">
+					<div class="form-group">
+						<label>Adresse email</label> <input type="email" class="form-control" name="email">
+					</div>
+					<div class="form-group">
+						<label>Password</label> <input type="password" name="password" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Prénom</label> <input type="text" name="firstName" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Nom</label> <input type="text" name="lastName" class="form-control">
+					</div>
+					<div class="form-group">
+						<select class="form-control" name="isChief">
+							<option value="false">Journaliste</option>
+							<option value="true">Rédacteur en chef</option>
+						</select>
+					</div>	
+					<button type="submit" class="btn btn-default">Ajouter le journaliste</button>
+				</form>
+			</div>	
+		</div>		
 	</div>
 </body>
 </html>

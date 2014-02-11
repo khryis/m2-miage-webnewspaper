@@ -2,6 +2,7 @@ package fr.miage.webnewspaper.bean.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,10 +27,10 @@ public class Reader extends User {
 
 	private static final long serialVersionUID = 1L;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true, mappedBy="writer", cascade={CascadeType.ALL})
 	private List<Rate> rates;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY,orphanRemoval=true, mappedBy="writer", cascade={CascadeType.ALL})
 	private List<Comment> comments;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
